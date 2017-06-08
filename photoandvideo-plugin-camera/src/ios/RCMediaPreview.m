@@ -13,10 +13,11 @@ NSString *const RCMeidaPlayStatus = @"status";
 
 @interface RCMediaPreview ()
 {
-    @private
+@private
     AVPlayer *_prePlayer;
     AVPlayerItem *_preItem;
     AVPlayerLayer *_preLayer;
+    AVCaptureVideoPreviewLayer  * previewLayer;
 }
 
 @end
@@ -24,12 +25,12 @@ NSString *const RCMeidaPlayStatus = @"status";
 @implementation RCMediaPreview
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 
 #pragma mark - public method
@@ -48,15 +49,27 @@ NSString *const RCMeidaPlayStatus = @"status";
     {
         case RCMediaTypeImage:
         {
-             
+            
             if([_mediaInfo.mediaData isKindOfClass:[UIImage class]])
             {
                 
-               
                 
-                self.layer.contentsGravity = kCAGravityResizeAspectFill;
-                self.layer.contents = (id)[((UIImage*)_mediaInfo.mediaData) CGImage];
-                self.hidden = NO;
+                
+                //                self.layer.contentsGravity = kCAGravityResizeAspect;
+                //                self.layer.contents = (id)[((UIImage*)_mediaInfo.mediaData) CGImage];
+                //                self.hidden = NO;
+                
+                previewLayer = [[AVCaptureVideoPreviewLayer alloc]init];
+                previewLayer.contents= (id)[((UIImage*)_mediaInfo.mediaData) CGImage];
+                [ self.layer setMasksToBounds:YES];
+                
+                CGRect bounds = [self bounds];
+                [previewLayer setFrame:bounds];
+                [previewLayer setVideoGravity:AVLayerVideoGravityResizeAspect];
+                
+                [self.layer insertSublayer:previewLayer below:[[self.layer sublayers] objectAtIndex:0]];
+                
+                
             }
         }
             break;

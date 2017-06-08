@@ -92,4 +92,23 @@
      [self.plugin dismissCamera];
 }
 
+
+#pragma mark--- 屏幕保持全屏
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return UIInterfaceOrientationPortrait == toInterfaceOrientation;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
+
+{
+    return UIInterfaceOrientationMaskPortrait;
+    
+}
+
 @end
